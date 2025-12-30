@@ -32,10 +32,11 @@ This server uses MongoDB Atlas (cloud MongoDB) for database storage.
    - In the `server` directory, create a `.env` file
    - Add the following:
    ```
-   MONGO_URI=mongodb+srv://<username>:<password>@<cluster-url>/buildwise?retryWrites=true&w=majority
+   MONGO_URI=mongodb+srv://my_team:<db_password>@fsd.6suemfy.mongodb.net/buildwise?retryWrites=true&w=majority
    PORT=5000
    ```
-   - Replace `<username>`, `<password>`, and `<cluster-url>` with your actual MongoDB Atlas credentials
+   - **Important**: Replace `<db_password>` with your actual database password for the `my_team` user
+   - Example: `MONGO_URI=mongodb+srv://my_team:MyPassword123@fsd.6suemfy.mongodb.net/buildwise?retryWrites=true&w=majority`
 
 ### Install Dependencies
 
