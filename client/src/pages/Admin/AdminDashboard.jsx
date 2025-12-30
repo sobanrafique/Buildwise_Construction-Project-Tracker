@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { API_ENDPOINTS } from '../../config/api';
 
 const AdminDashboard = () => {
   const [formData, setFormData] = useState({
@@ -14,7 +15,7 @@ const AdminDashboard = () => {
 
   const fetchUsers = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/admin/users');
+      const res = await fetch(API_ENDPOINTS.ADMIN.GET_USERS);
       const data = await res.json();
       setUsers(data);
     } catch (error) {
@@ -25,7 +26,7 @@ const AdminDashboard = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch('http://localhost:5000/api/admin/create-user', {
+      const res = await fetch(API_ENDPOINTS.ADMIN.CREATE_USER, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
@@ -33,12 +34,13 @@ const AdminDashboard = () => {
       const data = await res.json();
       if (res.ok) {
         setMessage('User Created Successfully!');
+        setFormData({ name: '', email: '', password: '', role: 'site_worker' }); // Reset form
         fetchUsers(); // Refresh list
       } else {
         setMessage('Error: ' + data.message);
       }
     } catch (error) {
-      setMessage('Server Error');
+      setMessage('Server Error: ' + error.message);
     }
   };
 
