@@ -19,6 +19,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// API routes
+app.use('/api/tasks', taskRoutes);
 app.use('/admin', adminRoutes);
 app.use('/manager', managerRoutes);
 app.use('/worker', workerRoutes);
@@ -34,8 +36,15 @@ module.exports = app;
 
 if (require.main === module) {
   const PORT = process.env.PORT || 5000;
-  app.listen(PORT, () => {
-    console.log(`Server listening on port ${PORT}`);
-  });
+  connectDB()
+    .then(() => {
+      app.listen(PORT, () => {
+        console.log(`Server listening on port ${PORT}`);
+      });
+    })
+    .catch((err) => {
+      console.error('Failed to start server:', err.message);
+      process.exit(1);
+    });
 }
 
