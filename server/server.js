@@ -8,9 +8,9 @@ const app = express();
 
 app.use(express.json());
 
-app.use('/admin', adminRoutes);
-app.use('/manager', managerRoutes);
-app.use('/worker', workerRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api/manager', managerRoutes);
+app.use('/api/worker', workerRoutes);
 
 app.get('/', (req, res) => {
   res.send('Server is running');
