@@ -1,16 +1,30 @@
 // Basic Express server setup with mounted route groups
+require('dotenv').config();
 const express = require('express');
+const cors = require('cors');
+const connectDB = require('./config/db');
 const adminRoutes = require('./routes/adminRoutes');
 const managerRoutes = require('./routes/managerRoutes');
 const workerRoutes = require('./routes/workerRoutes');
+const taskRoutes = require('./routes/taskRoutes');
+const projectRoutes = require('./routes/projectRoutes');
+const userRoutes = require('./routes/userRoutes');
+
+// Connect to MongoDB Atlas
+connectDB();
 
 const app = express();
 
+// Middleware
+app.use(cors());
 app.use(express.json());
 
 app.use('/admin', adminRoutes);
 app.use('/manager', managerRoutes);
 app.use('/worker', workerRoutes);
+app.use('/tasks', taskRoutes);
+app.use('/projects', projectRoutes);
+app.use('/users', userRoutes);
 
 app.get('/', (req, res) => {
   res.send('Server is running');
