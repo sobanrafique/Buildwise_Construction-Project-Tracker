@@ -73,12 +73,18 @@ npm install
 cp .env.example .env
 ```
 
-4. Update `.env` with your MongoDB Atlas connection string:
-   - Go to [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
-   - Create a free cluster
-   - Get your connection string
-   - Replace the `MONGODB_URI` in `.env` with your connection string
-   - Example: `mongodb+srv://username:password@cluster.mongodb.net/buildwise?retryWrites=true&w=majority`
+4. Create a `.env` file in the `server` directory with the following content:
+   ```env
+   PORT=5000
+   MONGODB_URI=mongodb+srv://my_team:YOUR_PASSWORD@fsd.6suemfy.mongodb.net/buildwise?retryWrites=true&w=majority&appName=Fsd
+   JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
+   NODE_ENV=development
+   ```
+   
+   **Important**: 
+   - Replace `YOUR_PASSWORD` with your actual MongoDB database password
+   - Make sure your IP address is whitelisted in MongoDB Atlas Network Access
+   - See `server/MONGODB_SETUP.md` for detailed setup instructions
 
 5. Update `JWT_SECRET` with a strong random string
 

@@ -10,9 +10,6 @@ const taskRoutes = require('./routes/taskRoutes');
 const projectRoutes = require('./routes/projectRoutes');
 const userRoutes = require('./routes/userRoutes');
 
-// Connect to MongoDB Atlas
-connectDB();
-
 const app = express();
 
 // Middleware
@@ -20,7 +17,6 @@ app.use(cors());
 app.use(express.json());
 
 // API routes
-app.use('/api/tasks', taskRoutes);
 app.use('/admin', adminRoutes);
 app.use('/manager', managerRoutes);
 app.use('/worker', workerRoutes);
@@ -36,6 +32,7 @@ module.exports = app;
 
 if (require.main === module) {
   const PORT = process.env.PORT || 5000;
+  // Connect to MongoDB Atlas before starting server
   connectDB()
     .then(() => {
       app.listen(PORT, () => {
