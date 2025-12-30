@@ -1,8 +1,8 @@
 const express = require('express');
-
 const router = express.Router();
+const { createUser, getAllUsers } = require('../controllers/adminController');
 
-// TODO: add admin routes
+router.post('/create-user', createUser);
+router.get('/users', getAllUsers);
 
 module.exports = router;
-
