@@ -1,107 +1,216 @@
-# Quick Setup Guide
+# Buildwise Construction Project Tracker - Setup Guide
 
-## MongoDB Atlas Setup (5 minutes)
+## MongoDB Atlas Integration
 
-### Step 1: Create MongoDB Atlas Account
-1. Go to https://www.mongodb.com/cloud/atlas
-2. Sign up for a free account
-3. Verify your email
+This project uses **MongoDB Atlas** (cloud MongoDB) for the backend database and **React** for the frontend.
 
-### Step 2: Create a Free Cluster
-1. Click "Build a Database"
-2. Choose **FREE** (M0) tier
-3. Select a cloud provider (AWS, Google Cloud, or Azure)
-4. Choose a region closest to you
-5. Click "Create Cluster" (takes 3-5 minutes)
+---
 
-### Step 3: Create Database User
-1. Go to "Database Access" in the left sidebar
-2. Click "Add New Database User"
-3. Choose "Password" authentication
-4. Enter a username (e.g., `buildwise_user`)
-5. Generate a secure password (save it!)
-6. Set privileges to "Read and write to any database"
-7. Click "Add User"
+## Backend Setup (Node.js + MongoDB Atlas)
 
-### Step 4: Whitelist IP Address
-1. Go to "Network Access" in the left sidebar
-2. Click "Add IP Address"
-3. For development: Click "Allow Access from Anywhere" (0.0.0.0/0)
-4. Click "Confirm"
-
-### Step 5: Get Connection String
-1. Go to "Clusters" in the left sidebar
-2. Click "Connect" on your cluster
-3. Choose "Connect your application"
-4. Copy the connection string
-   - It looks like: `mongodb+srv://<username>:<password>@cluster0.xxxxx.mongodb.net/?retryWrites=true&w=majority`
-5. Replace `<username>` with your database username
-6. Replace `<password>` with your database password
-7. Add database name: Replace `?` with `/buildwise?`
-   - Final: `mongodb+srv://buildwise_user:yourpassword@cluster0.xxxxx.mongodb.net/buildwise?retryWrites=true&w=majority`
-
-## Backend Setup
+### Step 1: Install Dependencies
 
 ```bash
-# Navigate to server directory
 cd server
-
-# Install dependencies
 npm install
-
-# Create .env file
-# Copy the example and edit it
-cp .env.example .env
-
-# Edit .env file and add your MongoDB Atlas connection string
-# MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/buildwise?retryWrites=true&w=majority
-
-# Start the server
-npm run dev
 ```
 
-## Frontend Setup
+This will install:
+- `express` - Web framework
+- `mongoose` - MongoDB ODM
+- `bcryptjs` - Password hashing
+- `dotenv` - Environment variables
+- `cors` - Cross-origin resource sharing
+- `jsonwebtoken` - JWT authentication
+
+### Step 2: Set Up MongoDB Atlas
+
+1. **Create MongoDB Atlas Account**:
+   - Go to https://www.mongodb.com/cloud/atlas
+   - Sign up for a free account
+
+2. **Create a Cluster**:
+   - Click "Build a Database"
+   - Choose the FREE tier (M0)
+   - Select your preferred cloud provider and region
+   - Click "Create"
+
+3. **Create Database User**:
+   - Go to "Database Access" in the left sidebar
+   - Click "Add New Database User"
+   - Choose "Password" authentication
+   - Create a username and password (save these!)
+   - Set privileges to "Atlas admin" or "Read and write to any database"
+   - Click "Add User"
+
+4. **Configure Network Access**:
+   - Go to "Network Access" in the left sidebar
+   - Click "Add IP Address"
+   - For development, click "Allow Access from Anywhere" (0.0.0.0/0)
+   - **Note**: For production, use specific IP addresses only
+   - Click "Confirm"
+
+5. **Get Connection String**:
+   - Go to "Database" → Click "Connect" on your cluster
+   - Choose "Connect your application"
+   - Copy the connection string
+   - It looks like: `mongodb+srv://<username>:<password>@cluster0.xxxxx.mongodb.net/`
+
+### Step 3: Create .env File
+
+In the `server` directory, create a `.env` file:
+
+```env
+MONGO_URI=mongodb+srv://YOUR_USERNAME:YOUR_PASSWORD@YOUR_CLUSTER_URL/buildwise?retryWrites=true&w=majority
+PORT=5000
+```
+
+**Replace**:
+- `YOUR_USERNAME` - Your MongoDB Atlas database username
+- `YOUR_PASSWORD` - Your MongoDB Atlas database password
+- `YOUR_CLUSTER_URL` - Your cluster URL (e.g., `cluster0.xxxxx.mongodb.net`)
+
+**Example**:
+```env
+MONGO_URI=mongodb+srv://admin:MyPassword123@cluster0.abc123.mongodb.net/buildwise?retryWrites=true&w=majority
+PORT=5000
+```
+
+### Step 4: Run the Server
 
 ```bash
-# Navigate to client directory
-cd client
-
-# Install dependencies
-npm install
-
-# Create .env file
-# Create a file named .env with:
-# REACT_APP_API_URL=http://localhost:5000
-
-# Start the development server
+cd server
 npm start
 ```
 
+Or for development with auto-reload:
+```bash
+npm run dev
+```
+
+You should see:
+```
+MongoDB Atlas Connected: cluster0.xxxxx.mongodb.net
+Server listening on port 5000
+```
+
+---
+
+## Frontend Setup (React)
+
+### Step 1: Install Dependencies
+
+```bash
+cd client
+npm install
+```
+
+### Step 2: Configure API URL (Optional)
+
+The frontend is configured to connect to `http://localhost:5000` by default.
+
+To change the API URL, create a `.env` file in the `client` directory:
+
+```env
+REACT_APP_API_URL=http://localhost:5000
+```
+
+For production, set this to your backend server URL.
+
+### Step 3: Run the Frontend
+
+```bash
+cd client
+npm start
+```
+
+The React app will open at `http://localhost:3000`
+
+---
+
+## Project Structure
+
+```
+Buildwise_Construction-Project-Tracker/
+├── server/
+│   ├── config/
+│   │   └── db.js              # MongoDB Atlas connection
+│   ├── controllers/
+│   │   ├── adminController.js
+│   │   ├── managerController.js
+│   │   ├── workerController.js
+│   │   ├── projectController.js
+│   │   ├── taskController.js
+│   │   └── userController.js
+│   ├── models/
+│   │   ├── User.js            # User model with MongoDB/Mongoose
+│   │   ├── Project.js
+│   │   └── Task.js
+│   ├── routes/
+│   │   ├── adminRoutes.js
+│   │   ├── managerRoutes.js
+│   │   ├── workerRoutes.js
+│   │   ├── projectRoutes.js
+│   │   ├── taskRoutes.js
+│   │   └── userRoutes.js
+│   ├── middleware/
+│   │   └── auth.js
+│   ├── server.js              # Express server + MongoDB connection
+│   ├── package.json
+│   └── .env                   # MongoDB Atlas connection string (create this)
+│
+└── client/
+    ├── src/
+    │   ├── config/
+    │   │   └── api.js         # API endpoint configuration
+    │   ├── pages/
+    │   │   ├── Admin/
+    │   │   ├── Manager/
+    │   │   ├── Worker/
+    │   │   ├── projects/
+    │   │   └── tasks/
+    │   └── App.js
+    └── package.json
+```
+
+---
+
 ## Testing the Connection
 
-1. Start the backend server - you should see:
-   ```
-   MongoDB Connected: cluster0.xxxxx.mongodb.net
-   Server listening on port 5000
-   ```
+1. **Start the backend server** (port 5000)
+2. **Start the frontend** (port 3000)
+3. **Navigate to** `http://localhost:3000/admin`
+4. **Try creating a user** - If MongoDB Atlas is connected, the user will be saved to the cloud database!
 
-2. If you see "MongoDB Connected", your database connection is working!
-
-3. Start the frontend - it should open at http://localhost:3000
+---
 
 ## Troubleshooting
 
-### MongoDB Connection Error
-- Check your connection string format
-- Verify username and password are correct
-- Make sure IP address is whitelisted
-- Check if cluster is fully created (green status)
+### MongoDB Atlas Connection Issues
 
-### Port Already in Use
-- Change PORT in server/.env file
-- Or kill the process using the port
+- **Error: "authentication failed"**
+  - Check your username and password in the `.env` file
+  - Make sure you URL-encoded special characters in the password
 
-### CORS Errors
-- Make sure backend is running
-- Check REACT_APP_API_URL in client/.env
+- **Error: "IP not whitelisted"**
+  - Go to MongoDB Atlas → Network Access
+  - Add your current IP address or use `0.0.0.0/0` for development
 
+- **Error: "connection timeout"**
+  - Check your internet connection
+  - Verify the cluster is running in MongoDB Atlas
+  - Make sure the connection string is correct
+
+### Frontend Can't Connect to Backend
+
+- Make sure the backend server is running on port 5000
+- Check that `REACT_APP_API_URL` in client `.env` matches your backend URL
+- Check browser console for CORS errors (CORS middleware is already configured)
+
+---
+
+## Next Steps
+
+- Implement authentication (JWT tokens)
+- Add more features for Manager and Worker dashboards
+- Deploy to production (Heroku, Vercel, etc.)
